@@ -9,6 +9,7 @@ class RoundedSmallButton extends StatelessWidget {
   final String label;
   final Color backgroundColor;
   final Color textColor;
+  final double verticalPadding;
 
   const RoundedSmallButton({
     super.key,
@@ -16,6 +17,7 @@ class RoundedSmallButton extends StatelessWidget {
     required this.label,
     this.backgroundColor = Pallete.whiteColor,
     this.textColor = Pallete.backgroundColor,
+    this.verticalPadding = 0,
   });
 
   @override
@@ -31,9 +33,9 @@ class RoundedSmallButton extends StatelessWidget {
           ),
         ),
         backgroundColor: backgroundColor,
-        labelPadding: const EdgeInsets.symmetric(
+        labelPadding: EdgeInsets.symmetric(
           horizontal: 20,
-          vertical: 5
+          vertical: verticalPadding
         ),
       ),
     );

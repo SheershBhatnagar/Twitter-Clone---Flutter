@@ -84,6 +84,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                   child: RoundedSmallButton(
                     onTap: onSignUp,
                     label: "Done",
+                    verticalPadding: 5,
                   ),
                 ),
                 const SizedBox(height: 40),
