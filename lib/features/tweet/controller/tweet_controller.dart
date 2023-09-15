@@ -1,11 +1,13 @@
 
 import 'dart:io';
 
+import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:twitter_clone/api/tweet_api.dart';
 import 'package:twitter_clone/core/utils.dart';
+import 'package:twitter_clone/models/user_model.dart';
 
 import '../../../api/storage_api.dart';
 import '../../../core/enums/tweet_type_enum.dart';
@@ -50,6 +52,54 @@ class TweetController extends StateNotifier<bool> {
     return tweetList.map((tweet) => Tweet.fromMap(tweet.data)).toList();
   }
 
+  void likeTweet(Tweet tweet, UserModel user) async {
+
+    List<String> likes = tweet.likes;
+
+    if(tweet.likes.contains(user.uid)) {
+      likes.remove(user.uid);
+    }
+    else {
+      likes.add(user.uid);
+    }
+
+    tweet = tweet.copyWith(likes: likes);
+
+    final res = await _tweetAPI.likeTweet(tweet);
+    res.fold((l) => null, (r) => null);
+  }
+
+  void reshareTweet(
+      Tweet tweet,
+      UserModel currentUser,
+      BuildContext context,
+      ) async {
+
+    tweet = tweet.copyWith(
+      retweetedBy: currentUser.name,
+      likes: [],
+      commentIds: [],
+      reshareCount: tweet.reshareCount + 1,
+    );
+
+    final res = await _tweetAPI.updateReshareCount(tweet);
+    res.fold(
+            (l) => showSnackBar(context, l.message),
+            (r) async {
+              tweet = tweet.copyWith(
+                id: ID.unique(),
+                reshareCount: 0,
+              );
+
+              final res2 = await _tweetAPI.shareTweet(tweet);
+              res2.fold(
+                      (l) => showSnackBar(context, l.message),
+                      (r) => showSnackBar(context, "Retweeted"),
+              );
+            }
+    );
+  }
+
   void shareTweet({
     required String text,
     required List<File> images,
@@ -88,17 +138,18 @@ class TweetController extends StateNotifier<bool> {
     final imageLinks = await _storageAPI.uploadImage(images);
 
     Tweet tweet = Tweet(
-        text: text,
-        hashtags: hashtags,
-        link: link,
-        imageLinks: imageLinks,
-        uid: user.uid,
-        tweetType: TweetType.image,
-        tweetedAt: DateTime.now(),
-        likes: const [],
-        commentIds: const [],
-        reshareCount: 0,
-        id: ''
+      text: text,
+      hashtags: hashtags,
+      link: link,
+      imageLinks: imageLinks,
+      uid: user.uid,
+      tweetType: TweetType.image,
+      tweetedAt: DateTime.now(),
+      likes: const [],
+      commentIds: const [],
+      reshareCount: 0,
+      id: '',
+      retweetedBy: '',
     );
 
     final res = await _tweetAPI.shareTweet(tweet);
@@ -130,7 +181,8 @@ class TweetController extends StateNotifier<bool> {
       likes: const [],
       commentIds: const [],
       reshareCount: 0,
-      id: ''
+      id: '',
+      retweetedBy: '',
     );
 
     final res = await _tweetAPI.shareTweet(tweet);

@@ -16,6 +16,7 @@ import 'package:twitter_clone/theme/pallete.dart';
 import '../../../common/error_page.dart';
 import '../../../common/loading_page.dart';
 import '../../../core/enums/tweet_type_enum.dart';
+import '../controller/tweet_controller.dart';
 import 'carousel_image.dart';
 
 class TweetCard extends ConsumerWidget {
@@ -29,7 +30,10 @@ class TweetCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(userDetailsProvider(_tweet.uid)).when(
+
+    final currentUser = ref.watch(currentUserDetailsProvider).value;
+
+    return currentUser == null ? const SizedBox() : ref.watch(userDetailsProvider(_tweet.uid)).when(
       data: (user) {
         return Column(
           children: [
@@ -102,10 +106,23 @@ class TweetCard extends ConsumerWidget {
                             TweetIconButton(
                               pathName: AssetsConstants.retweetIcon,
                               text: _tweet.reshareCount.toString(),
-                              onTap: () {},
+                              onTap: () {
+                                ref.read(tweetControllerProvider.notifier).reshareTweet(
+                                  _tweet,
+                                  currentUser,
+                                  context,
+                                );
+                              },
                             ),
                             LikeButton(
+                              onTap: (isLiked) async {
+                                ref.read(tweetControllerProvider.notifier).likeTweet(
+                                  _tweet, user
+                                );
+                                return !isLiked;
+                              },
                               size: 23,
+                              isLiked: _tweet.likes.contains(currentUser.uid),
                               likeBuilder: (bool isLiked) {
                                 return isLiked ? SvgPicture.asset(
                                   AssetsConstants.likeFilledIcon,
