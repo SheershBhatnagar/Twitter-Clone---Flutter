@@ -3,7 +3,7 @@ import 'package:appwrite/models.dart' as model;
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:twitter_clone/constants/appwrite_constants.dart';
+import 'package:twitter_clone/constants/constants.dart';
 
 import 'package:twitter_clone/core/utils.dart';
 import 'package:twitter_clone/features/auth/view/login_view.dart';
