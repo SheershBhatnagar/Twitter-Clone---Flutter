@@ -42,6 +42,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
       text: tweetTextController.text,
       images: images,
       context: context,
+      repliedTo: '',
     );
 
     Navigator.pop(context);
