@@ -1,12 +1,12 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:twitter_clone/models/user_model.dart';
 
 import '../../../api/user_api.dart';
 
-final exploreControllerProvider = StateNotifierProvider<ExploreController, bool>((ref) {
-  final userAPI = ref.watch(userAPIProvider);
-  return ExploreController(userAPI: userAPI);
+final exploreControllerProvider = StateNotifierProvider((ref) {
+  return ExploreController(userAPI: ref.watch(userAPIProvider));
 });
 
 final searchUserProvider = FutureProvider.family((ref, String name) async {

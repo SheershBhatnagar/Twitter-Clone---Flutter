@@ -17,6 +17,7 @@ import 'package:twitter_clone/theme/pallete.dart';
 import '../../../common/error_page.dart';
 import '../../../common/loading_page.dart';
 import '../../../core/enums/tweet_type_enum.dart';
+import '../../user_profile/view/user_profile_view.dart';
 import '../controller/tweet_controller.dart';
 import 'carousel_image.dart';
 
@@ -42,7 +43,6 @@ class TweetCard extends ConsumerWidget {
           },
           child: Column(
             children: [
-              const SizedBox(height: 10),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -50,9 +50,14 @@ class TweetCard extends ConsumerWidget {
                     margin: const EdgeInsets.symmetric(
                       horizontal: 8,
                     ),
-                    child: CircleAvatar(
-                      radius: 20,
-                      backgroundImage: NetworkImage(user.profilePic),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(context, UserProfileView.route(user));
+                      },
+                      child: CircleAvatar(
+                        radius: 20,
+                        backgroundImage: NetworkImage(user.profilePic),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8),

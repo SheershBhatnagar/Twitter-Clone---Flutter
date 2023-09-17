@@ -9,6 +9,7 @@ import '../features/tweet/widgets/tweet_list.dart';
 import '../theme/pallete.dart';
 
 class UIConstants {
+
   static AppBar appBar() {
     return AppBar(
       title: SvgPicture.asset(

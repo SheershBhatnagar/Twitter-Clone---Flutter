@@ -71,6 +71,12 @@ class _HomeViewState extends State<HomeView> {
                 color: Pallete.whiteColor,
               ),
           ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              _page == 3 ? Icons.person : Icons.person_outline,
+              color: Pallete.whiteColor,
+            )
+          ),
         ],
       ),
     );

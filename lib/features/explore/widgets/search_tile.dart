@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+
 import 'package:twitter_clone/models/user_model.dart';
 
 class SearchTile extends StatelessWidget {

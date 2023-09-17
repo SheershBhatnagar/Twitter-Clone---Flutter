@@ -48,15 +48,13 @@ class _ExploreViewState extends ConsumerState<ExploreView> {
           child: TextField(
             controller: searchController,
             onSubmitted: (value) {
-              if (value.isNotEmpty) {
-                setState(() {
-                  isShowUsers = true;
-                });
-              }
+              setState(() {
+                isShowUsers = true;
+                print('searching for users $isShowUsers');
+              });
             },
             decoration: InputDecoration(
               hintText: 'Search Twitter',
-              hintStyle: Theme.of(context).textTheme.bodyText1,
               fillColor: Pallete.searchBarColor,
               filled: true,
               enabledBorder: appBarTextFieldBorder,
@@ -69,22 +67,18 @@ class _ExploreViewState extends ConsumerState<ExploreView> {
           )
         ),
       ),
-      body: isShowUsers ? ref.watch(searchUserProvider(searchController.text)).when(
+      body: ref.watch(searchUserProvider(searchController.text.trim())).when(
         data: (users) {
           return ListView.builder(
             itemCount: users.length,
-            itemBuilder: (context, index) {
-
+            itemBuilder: (BuildContext context, int index) {
               final user = users[index];
-
               return SearchTile(userModel: user);
             },
           );
         },
         error: (error, st) => ErrorText(error: error.toString()),
         loading: () => const Loader(),
-      ) : const Center(
-        child: Text('Search for users'),
       ),
     );
   }
